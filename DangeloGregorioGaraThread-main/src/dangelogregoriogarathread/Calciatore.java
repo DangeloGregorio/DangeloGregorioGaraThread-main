@@ -6,7 +6,7 @@ package dangelogregoriogarathread;
  */
 public class Calciatore extends Thread {
 
-    private String nome;
+    private String nome; //nome
     private int posizione;
     private FrameGara finestra;
     private static final int passiArrivo = 70;
