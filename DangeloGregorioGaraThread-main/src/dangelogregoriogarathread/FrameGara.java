@@ -52,7 +52,9 @@ public class FrameGara extends javax.swing.JFrame {
         this.setResizable(false);
         //ingrandisce la schermata a tutto schermo
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        calcolaScala();
         collegaComponenti();
+        ridimensionaComponenti();
         avviaGara();
     }
 
@@ -226,28 +228,28 @@ public class FrameGara extends javax.swing.JFrame {
         ProgressBarMessi.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80, 180, 80)));
         ProgressBarMessi.setBorderPainted(false);
         panelGara.add(ProgressBarMessi);
-        ProgressBarMessi.setBounds(30, 30, 1100, 180);
+        ProgressBarMessi.setBounds(30, 30, 1280, 180);
 
         ProgressBarRonaldo.setBackground(new java.awt.Color(20, 60, 20));
         ProgressBarRonaldo.setForeground(new java.awt.Color(255, 255, 255));
         ProgressBarRonaldo.setBorder(null);
         ProgressBarRonaldo.setBorderPainted(false);
         panelGara.add(ProgressBarRonaldo);
-        ProgressBarRonaldo.setBounds(30, 240, 1100, 180);
+        ProgressBarRonaldo.setBounds(30, 240, 1280, 180);
 
         ProgressBarNeymar.setBackground(new java.awt.Color(20, 60, 20));
         ProgressBarNeymar.setForeground(new java.awt.Color(255, 255, 255));
         ProgressBarNeymar.setBorder(null);
         ProgressBarNeymar.setBorderPainted(false);
         panelGara.add(ProgressBarNeymar);
-        ProgressBarNeymar.setBounds(30, 660, 1100, 180);
+        ProgressBarNeymar.setBounds(30, 660, 1280, 180);
 
         ProgressBarHaaland.setBackground(new java.awt.Color(20, 60, 20));
         ProgressBarHaaland.setForeground(new java.awt.Color(255, 255, 255));
         ProgressBarHaaland.setBorder(null);
         ProgressBarHaaland.setBorderPainted(false);
         panelGara.add(ProgressBarHaaland);
-        ProgressBarHaaland.setBounds(30, 450, 1100, 180);
+        ProgressBarHaaland.setBounds(30, 450, 1280, 180);
 
         getContentPane().add(panelGara, java.awt.BorderLayout.CENTER);
 
@@ -275,7 +277,7 @@ public class FrameGara extends javax.swing.JFrame {
         for (String nome : immaginiCalciatori.keySet()) {
             immaginiCalciatori.get(nome).setIcon(caricaIcona(nome.toLowerCase() + "Corre", 120, 120));
         }
-         // imposta il massimo di ogni barra uguale ai passi per arrivare
+        // imposta il massimo di ogni barra uguale ai passi per arrivare
         for (JProgressBar barra : barreAvanzamento.values()) {
             barra.setMaximum(passiArrivo);
             barra.setMinimum(0);
@@ -291,6 +293,57 @@ public class FrameGara extends javax.swing.JFrame {
         panelGara.setComponentZOrder(lblNeymarGara, 3);
     }
 
+    private double scalaX;
+    private double scalaY;
+
+    /**
+     * calcola i fattori di scala confrontando la risoluzione reale dello 
+     * schermo con quella su cui ho sviluppato il progetto (1920x1080) va 
+     * chiamata prima di tutto il resto nel costruttore
+     */
+    private void calcolaScala() {
+        // prende la dimensione reale dello schermo
+        java.awt.Dimension schermo = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+         // 1920 e 1080 misure dove ho sviluppato tutto
+        scalaX = schermo.getWidth() / 1920.0;
+        scalaY = schermo.getHeight() / 1080.0;
+    }
+    
+    /**
+     * ridimensiona tutti i componenti del panelGara in base ai fattori di scala
+     * calcolati aggiorna le bounds delle progress bar, delle label e le
+     * dimensioni delle icone va chiamata dopo collegaComponenti e prima di
+     * avviaGara
+     */
+    private void ridimensionaComponenti() {
+        // ridimensiona ogni label immagine e la sua progress bar in base allo schermo
+        int xInizio = (int) (30 * scalaX);
+        int larghezza = (int) (1280 * scalaX);
+
+        int yMessi = (int) (30 * scalaY);
+        int yRonaldo = (int) (240 * scalaY);
+        int yHaaland = (int) (450 * scalaY);
+        int yNeymar = (int) (660 * scalaY);
+        int altezzaRiga = (int) (180 * scalaY);
+        int dimImg = (int) (120 * scalaY);
+
+        lblMessiGara.setBounds(xInizio, (int) (60 * scalaY), dimImg, dimImg);
+        lblRonaldoGara.setBounds(xInizio, (int) (270 * scalaY), dimImg, dimImg);
+        lblHaalandGara.setBounds(xInizio, (int) (480 * scalaY), dimImg, dimImg);
+        lblNeymarGara.setBounds(xInizio, (int) (690 * scalaY), dimImg, dimImg);
+
+        ProgressBarMessi.setBounds(xInizio, yMessi, larghezza, altezzaRiga);
+        ProgressBarRonaldo.setBounds(xInizio, yRonaldo, larghezza, altezzaRiga);
+        ProgressBarHaaland.setBounds(xInizio, yHaaland, larghezza, altezzaRiga);
+        ProgressBarNeymar.setBounds(xInizio, yNeymar, larghezza, altezzaRiga);
+
+        // aggiorna anche le icone con la nuova dimensione scalata
+        for (String nome : immaginiCalciatori.keySet()) {
+            immaginiCalciatori.get(nome).setIcon(
+                    caricaIcona(nome.toLowerCase() + "Corre", dimImg, dimImg)
+            );
+        }
+    }
     /**
      * crea un thread per ogni calciatore e li avvia tutti insieme
      * ogni thread gestisce il movimento indipendente del proprio calciatore
@@ -324,7 +377,7 @@ public class FrameGara extends javax.swing.JFrame {
             JLabel etichetta = immaginiCalciatori.get(nome);
             if (etichetta != null) {
                 int xInizio = 30;
-                int larghezzaBarra = 1100;
+                int larghezzaBarra = (int)(1280 * scalaX);
                 int larghezzaImmagine = etichetta.getWidth();
                 int spazioDisponibile = larghezzaBarra - larghezzaImmagine;
                  // calcola la x proporzionale alla posizione del calciatore sulla barra
@@ -346,7 +399,7 @@ public class FrameGara extends javax.swing.JFrame {
             JLabel etichetta = immaginiCalciatori.get(nome);
             if (etichetta != null) {
                  // mostra l'immagine del calciatore a terra
-                etichetta.setIcon(caricaIcona(nome.toLowerCase() + "Terra", 120, 120));
+                etichetta.setIcon(caricaIcona(nome.toLowerCase() + "Terra", (int)(120 * scalaY), (int)(120 * scalaY)));
             }
         });
 
@@ -359,7 +412,7 @@ public class FrameGara extends javax.swing.JFrame {
             SwingUtilities.invokeLater(() -> { // invokeLater serve ai thread per non  modificare la grafica direttamente
                 JLabel etichetta = immaginiCalciatori.get(nome);
                 if (etichetta != null) {
-                    etichetta.setIcon(caricaIcona(nome.toLowerCase() + "Corre", 120, 120));
+                    etichetta.setIcon(caricaIcona(nome.toLowerCase() + "Corre", (int)(120 * scalaY), (int)(120 * scalaY)));
                 }
             });
             calciatore.rialzati(); // sblocca il thread
