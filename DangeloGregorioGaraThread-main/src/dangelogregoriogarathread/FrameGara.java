@@ -114,7 +114,7 @@ public class FrameGara extends javax.swing.JFrame {
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         panelDestra.setBackground(new java.awt.Color(10, 40, 10));
-        panelDestra.setPreferredSize(new java.awt.Dimension(350, 0));
+        panelDestra.setPreferredSize(new java.awt.Dimension(300, 0));
 
         panelClassifica.setBackground(new java.awt.Color(10, 40, 10));
         panelClassifica.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80, 180, 80)));
@@ -127,6 +127,7 @@ public class FrameGara extends javax.swing.JFrame {
 
         jTextArea1.setBackground(new java.awt.Color(10, 20, 10));
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
@@ -138,7 +139,7 @@ public class FrameGara extends javax.swing.JFrame {
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelClassificaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelClassificaLayout.setVerticalGroup(
@@ -153,7 +154,7 @@ public class FrameGara extends javax.swing.JFrame {
         panelImprevisti.setBackground(new java.awt.Color(10, 40, 10));
         panelImprevisti.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80, 180, 80)));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("AVVENIMENTI");
@@ -447,7 +448,7 @@ public class FrameGara extends javax.swing.JFrame {
                 barra.setValue(passiArrivo);
             }
 
-            String ris = posto == 1 ? "1° " : posto == 2 ? "2° " : posto == 3 ? "3° " : posto + "°";
+            String ris = posto == 1 ? "1° " : posto == 2 ? "2° " : posto == 3 ? "3° " : posto + "° ";
             classificaFinale.add(ris + " " + nome.toUpperCase());
             StringBuilder testo = new StringBuilder();
             for (String riga : classificaFinale) {
