@@ -1,40 +1,64 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package dangelogregoriogarathread;
 
 /**
- * Classe che rappresenta un calciatore che corre in una gara.
- * Ogni calciatore è un thread e avanza finché non arriva al traguardo.
+ * ogni calciatore è un thread separato che avanza in modo indipendente
+ * gestisce da solo il movimento, gli imprevisti e la caduta
+ *
+ * @author dange
  */
 public class Calciatore extends Thread {
 
-    private String nome; //nome
+    private String nome; 
     private int posizione;
     private FrameGara finestra;
-    private static final int passiArrivo = 70;
+    // deve essere uguale a quello di framegara per sapere quando fermarsi
+    private static final int passiArrivo = 100;
+    //blocca il thread quando il calciatore e caduto
     private boolean caduto = false;
 
+    /**
+     * Costruttore,crea il calciatore con nome e riferimento alla finestra
+     * parte sempre dalla posizione 0
+     *
+     * @param nome il nome del calciatore
+     * @param finestra la finestra principale da aggiornare durante la gara
+     */
     public Calciatore(String nome, FrameGara finestra) {
         this.nome = nome;
         this.finestra = finestra;
         this.posizione = 0;
     }
 
+    /**
+     * viene chiamato dalla finestra dopo 1,5 secondi di caduta
+     * rimette caduto a false e sveglia il thread che era in wait
+     */
     public synchronized void rialzati() {
         caduto = false;
         notify();
     }
     
+    /**
+     * contiene la logica della corsa, viene eseguito quando si chiama start()
+     * il ciclo va avanti finche il calciatore non raggiunge il traguardo
+     */
     @Override
    public void run() {
 
         while (posizione < passiArrivo) {
 
-            // se è caduto aspetta finché non viene rialzato
+             // se e caduto il thread si blocca qui e aspetta che rialzati() lo svegli
             synchronized (this) {
                 while (caduto) {
                     try { wait(); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
                 }
             }
 
+            // aspetta 200 millisecondi tra un passo e l altro per simulare la corsa
             try {
                 Thread.sleep(200);
             } catch (InterruptedException eccezione) {
@@ -44,16 +68,19 @@ public class Calciatore extends Thread {
             posizione++;
             finestra.aggiornaPosizioneCalciatore(nome, posizione);
 
+            // ogni passo c'è una possibilita che capiti un imprevisto
             Imprevisto imprevisto = GestioneImprevisti.generaImprevistoCasuale();
 
             if (imprevisto != null) {
                 finestra.mostraMessaggio(nome + ": " + imprevisto.getDescrizione());
 
+                // se neg il calciatore cade e si blocca
                 if (imprevisto.isNegativo()) {
                     caduto = true;
                     finestra.calciatoreCaduto(this);
                 }
 
+                // l'effetto puo essere pos o neg, modifica la posizione
                 posizione += imprevisto.getEffetto();
                 if (posizione < 0) posizione = 0;
             }
@@ -63,10 +90,16 @@ public class Calciatore extends Thread {
     }
 
 
+   /**
+     * @return il nome del calciatore
+     */
    public String getNome() {
         return nome;
     }
 
+   /**
+     * @return la posizione attuale del calciatore
+     */
     public int getPosizione() {
         return posizione;
     }

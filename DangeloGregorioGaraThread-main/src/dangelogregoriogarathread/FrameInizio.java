@@ -17,16 +17,19 @@ public class FrameInizio extends javax.swing.JFrame {
 
     private String calciatoreScelto = "";
     /**
-     * Creates new form FrameInizio
+     * costruttore
      */
     public FrameInizio() {
         initComponents();
-        // 1. Rende la finestra non ridimensionabile
+    //Rende la finestra non ridimensionabile
     this.setResizable(false);
-    // 2. Massimizza la finestra sia orizzontalmente che verticalmente
+    //ingrandisce la schermata a tutto schermo
     this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
-
+    
+    /**
+     * va a mettere lo sfondo dei calciatori del colore giusto
+     */
     private void resettaColori() {
     panelMessi.setBackground(new java.awt.Color(20,60,20));
     panelRonaldo.setBackground(new java.awt.Color(20,60,20));

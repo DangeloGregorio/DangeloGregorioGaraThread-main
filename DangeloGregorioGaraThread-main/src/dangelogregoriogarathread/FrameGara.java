@@ -4,7 +4,6 @@
  */
 package dangelogregoriogarathread;
 
-
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.util.ArrayList;
@@ -16,39 +15,46 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
+
 /**
+ * gestisce la finestra principale della gara mostra i calciatori che corrono
+ * con le progress bar
  *
  * @author dange
  */
 public class FrameGara extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrameGara.class.getName());
 
-    private static final int passiArrivo = 70;
+    // num di passi che servono per arrivare al traguardo
+    private static final int passiArrivo = 100;
     private String calciatoreSelezionato;
 
-    private final Map<String, JLabel>       immaginiCalciatori = new LinkedHashMap<>();
-    private final Map<String, JProgressBar> barreAvanzamento   = new LinkedHashMap<>();
+    // mappa che collega il nome del calciatore alla sua immagine nella finestra
+    private final Map<String, JLabel> immaginiCalciatori = new LinkedHashMap<>();
+    // mappa che collega il nome del calciatore alla sua barra di avanzamento
+    private final Map<String, JProgressBar> barreAvanzamento = new LinkedHashMap<>();
 
-    private final List<String>  classificaFinale = new ArrayList<>();
+    private final List<String> classificaFinale = new ArrayList<>();
     private final StringBuilder testoAvvenimenti = new StringBuilder();
     private int postoCorrente = 1;
 
-    
     /**
-     * Creates new form FrameGara
+     * costruttore
+     * riceve il nome del calciatore scelto dal giocatore nella schermata precedente
+     *
+     * @param nomeCalciatore calciatore scelto dall'utente
      */
     public FrameGara(String nomeCalciatore) {
-    this.calciatoreSelezionato = nomeCalciatore;
-    initComponents();
-    // 1. Rende la finestra non ridimensionabile
-    this.setResizable(false);
-    // 2. Massimizza la finestra sia orizzontalmente che verticalmente
-    this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-    collegaComponenti();
-    avviaGara();
-}
-
+        this.calciatoreSelezionato = nomeCalciatore;
+        initComponents();
+        //Rende la finestra non ridimensionabile
+        this.setResizable(false);
+        //ingrandisce la schermata a tutto schermo
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        collegaComponenti();
+        avviaGara();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -220,151 +226,212 @@ public class FrameGara extends javax.swing.JFrame {
         ProgressBarMessi.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(80, 180, 80)));
         ProgressBarMessi.setBorderPainted(false);
         panelGara.add(ProgressBarMessi);
-        ProgressBarMessi.setBounds(30, 30, 1280, 180);
+        ProgressBarMessi.setBounds(30, 30, 1100, 180);
 
         ProgressBarRonaldo.setBackground(new java.awt.Color(20, 60, 20));
         ProgressBarRonaldo.setForeground(new java.awt.Color(255, 255, 255));
         ProgressBarRonaldo.setBorder(null);
         ProgressBarRonaldo.setBorderPainted(false);
         panelGara.add(ProgressBarRonaldo);
-        ProgressBarRonaldo.setBounds(30, 240, 1280, 180);
+        ProgressBarRonaldo.setBounds(30, 240, 1100, 180);
 
         ProgressBarNeymar.setBackground(new java.awt.Color(20, 60, 20));
         ProgressBarNeymar.setForeground(new java.awt.Color(255, 255, 255));
         ProgressBarNeymar.setBorder(null);
         ProgressBarNeymar.setBorderPainted(false);
         panelGara.add(ProgressBarNeymar);
-        ProgressBarNeymar.setBounds(30, 660, 1280, 180);
+        ProgressBarNeymar.setBounds(30, 660, 1100, 180);
 
         ProgressBarHaaland.setBackground(new java.awt.Color(20, 60, 20));
         ProgressBarHaaland.setForeground(new java.awt.Color(255, 255, 255));
         ProgressBarHaaland.setBorder(null);
         ProgressBarHaaland.setBorderPainted(false);
         panelGara.add(ProgressBarHaaland);
-        ProgressBarHaaland.setBounds(30, 450, 1280, 180);
+        ProgressBarHaaland.setBounds(30, 450, 1100, 180);
 
         getContentPane().add(panelGara, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-   private void collegaComponenti() {
-    // collega immagini — usa i nomi delle tue JLabel nel panelGara
-    immaginiCalciatori.put("Messi",   lblMessiGara);
-    immaginiCalciatori.put("Ronaldo", lblRonaldoGara);
-    immaginiCalciatori.put("Haaland", lblHaalandGara);
-    immaginiCalciatori.put("Neymar",  lblNeymarGara);
+    /**
+     * collega i componenti grafici creati da netbeans alle mappe
+     * cosi posso aggiornarli durante la gara usando solo il nome del calciatore
+     */
+    private void collegaComponenti() {
+        // collega ogni nome alla sua etichetta immagine
+        immaginiCalciatori.put("Messi", lblMessiGara);
+        immaginiCalciatori.put("Ronaldo", lblRonaldoGara);
+        immaginiCalciatori.put("Haaland", lblHaalandGara);
+        immaginiCalciatori.put("Neymar", lblNeymarGara);
 
-    // collega progress bar — questi nomi li hai già nel designer
-    barreAvanzamento.put("Messi",   ProgressBarMessi);
-    barreAvanzamento.put("Ronaldo", ProgressBarRonaldo);
-    barreAvanzamento.put("Haaland", ProgressBarHaaland);
-    barreAvanzamento.put("Neymar",  ProgressBarNeymar);
+        // collega ogni nome alla sua progress bar
+        barreAvanzamento.put("Messi", ProgressBarMessi);
+        barreAvanzamento.put("Ronaldo", ProgressBarRonaldo);
+        barreAvanzamento.put("Haaland", ProgressBarHaaland);
+        barreAvanzamento.put("Neymar", ProgressBarNeymar);
 
-    // imposta immagini iniziali
-    for (String nome : immaginiCalciatori.keySet()) {
-    immaginiCalciatori.get(nome).setIcon(
-        caricaIcona(nome.toLowerCase() + "Corre", 120, 120)
-    );
-}
-    for (JProgressBar barra : barreAvanzamento.values()) {
-    barra.setMaximum(passiArrivo);
-    barra.setMinimum(0);
-}
-
-    // header "TU:"
-    lblTu.setText("TU: " + calciatoreSelezionato.toUpperCase());
-    labelTuImg.setIcon(caricaIcona(calciatoreSelezionato.toLowerCase() + "Inizio", 100, 100));
-    
-    panelGara.setComponentZOrder(lblMessiGara,   0);
-    panelGara.setComponentZOrder(lblRonaldoGara, 1);
-    panelGara.setComponentZOrder(lblHaalandGara, 2);
-    panelGara.setComponentZOrder(lblNeymarGara,  3);
-}
-
-private void avviaGara() {
-    String[] nomiCalciatori = {"Messi", "Ronaldo", "Haaland", "Neymar"};
-    for (String nome : nomiCalciatori) {
-        Calciatore calciatore = new Calciatore(nome, this);
-        calciatore.setDaemon(true);
-        calciatore.start();
-    }
-}
-public void aggiornaPosizioneCalciatore(String nome, int posizione) {
-    SwingUtilities.invokeLater(() -> {
-        JProgressBar barra = barreAvanzamento.get(nome);
-        if (barra != null) barra.setValue(posizione);
-
-        JLabel etichetta = immaginiCalciatori.get(nome);
-        if (etichetta != null) {
-            int xInizio = 30;
-            int larghezzaBarra = 1280;
-            int larghezzaImmagine = etichetta.getWidth();
-            int spazioDisponibile = larghezzaBarra - larghezzaImmagine;
-            int nuovaX = xInizio + (int)((posizione / (float) passiArrivo) * spazioDisponibile);
-            etichetta.setLocation(nuovaX, etichetta.getY());
+        // carica le immagini iniziali dei calciatori che corrono
+        for (String nome : immaginiCalciatori.keySet()) {
+            immaginiCalciatori.get(nome).setIcon(caricaIcona(nome.toLowerCase() + "Corre", 120, 120));
         }
-    });
-}
+         // imposta il massimo di ogni barra uguale ai passi per arrivare
+        for (JProgressBar barra : barreAvanzamento.values()) {
+            barra.setMaximum(passiArrivo);
+            barra.setMinimum(0);
+        }
 
-public void calciatoreCaduto(Calciatore calciatore) {
-    String nome = calciatore.getNome();
-    SwingUtilities.invokeLater(() -> {
-        JLabel etichetta = immaginiCalciatori.get(nome);
-        if (etichetta != null)
-            etichetta.setIcon(caricaIcona(nome.toLowerCase() + "Terra", 120, 120));
-    });
+        // mostra in alto il calciatore scelto con la sua immagine
+        lblTu.setText("TU: " + calciatoreSelezionato.toUpperCase());
+        labelTuImg.setIcon(caricaIcona(calciatoreSelezionato.toLowerCase() + "Inizio", 100, 100));
 
-    // dopo 2 secondi rialza il calciatore
-    new Thread(() -> {
-        try { Thread.sleep(2000); } catch (InterruptedException ignorata) {}
+        panelGara.setComponentZOrder(lblMessiGara, 0);
+        panelGara.setComponentZOrder(lblRonaldoGara, 1);
+        panelGara.setComponentZOrder(lblHaalandGara, 2);
+        panelGara.setComponentZOrder(lblNeymarGara, 3);
+    }
+
+    /**
+     * crea un thread per ogni calciatore e li avvia tutti insieme
+     * ogni thread gestisce il movimento indipendente del proprio calciatore
+     * setdaemon true fa si che i thread si chiudano quando si chiude la finestra
+     */
+    private void avviaGara() {
+        String[] nomiCalciatori = {"Messi", "Ronaldo", "Haaland", "Neymar"};
+        for (String nome : nomiCalciatori) {
+            Calciatore calciatore = new Calciatore(nome, this);
+            calciatore.setDaemon(true);
+            calciatore.start();
+        }
+    }
+
+     /**
+     * aggiorna la progress bar e sposta l'immagine del calciatore nella finestra
+     * viene chiamato dal thread del calciatore ogni volta che avanza di un passo
+     *
+     * @param nome il nome del calciatore da aggiornare
+     * @param posizione la posizione attuale del calciatore da 0 a passiArrivo
+     */
+    public void aggiornaPosizioneCalciatore(String nome, int posizione) {
+        // invokeLater serve ai thread per non  modificare la grafica direttamente
+        // tutte le modifiche ai componenti swing vanno fatte nel thread dell'interfaccia
         SwingUtilities.invokeLater(() -> {
+            JProgressBar barra = barreAvanzamento.get(nome);
+            if (barra != null) {
+                barra.setValue(posizione);
+            }
+
             JLabel etichetta = immaginiCalciatori.get(nome);
-            if (etichetta != null)
-                etichetta.setIcon(caricaIcona(nome.toLowerCase() + "Corre", 120, 120));
+            if (etichetta != null) {
+                int xInizio = 30;
+                int larghezzaBarra = 1100;
+                int larghezzaImmagine = etichetta.getWidth();
+                int spazioDisponibile = larghezzaBarra - larghezzaImmagine;
+                 // calcola la x proporzionale alla posizione del calciatore sulla barra
+                int nuovaX = xInizio + (int) ((posizione / (float) passiArrivo) * spazioDisponibile);
+                etichetta.setLocation(nuovaX, etichetta.getY());
+            }
         });
-        calciatore.rialzati(); // sblocca il thread
-    }).start();
-}
-
-public void mostraMessaggio(String messaggio) {
-    SwingUtilities.invokeLater(() -> {
-        testoAvvenimenti.insert(0, "• " + messaggio + "\n");
-        jTextArea2.setText(testoAvvenimenti.toString());
-    });
-}
-
-public synchronized void calciatoreArrivato(String nome) {
-    int posto = postoCorrente++;
-    SwingUtilities.invokeLater(() -> {
-        JProgressBar barra = barreAvanzamento.get(nome);
-        if (barra != null) barra.setValue(passiArrivo);
-
-        String medaglia = posto == 1 ? "1° 🥇" : posto == 2 ? "2° 🥈" : posto == 3 ? "3° 🥉" : posto + "°";
-        classificaFinale.add(medaglia + " " + nome.toUpperCase());
-        StringBuilder testo = new StringBuilder();
-        for (String riga : classificaFinale) testo.append(riga).append("\n");
-        jTextArea1.setText(testo.toString());
-
-        if (nome.equalsIgnoreCase(calciatoreSelezionato)) {
-            String esito = posto == 1 ? "HAI VINTO! 🎉" : "Sei arrivato " + posto + "°";
-            JOptionPane.showMessageDialog(this, esito, "GARA FINITA", JOptionPane.INFORMATION_MESSAGE);
-        }
-    });
-}
-
-private ImageIcon caricaIcona(String nomeFile, int larghezza, int altezza) {
-    try {
-        java.net.URL indirizzo = getClass().getResource(
-            "/Immagini/" + nomeFile + ".png");
-        if (indirizzo == null) return new ImageIcon();
-        Image immagine = new ImageIcon(indirizzo).getImage()
-            .getScaledInstance(larghezza, altezza, Image.SCALE_SMOOTH);
-        return new ImageIcon(immagine);
-    } catch (Exception errore) {
-        return new ImageIcon();
     }
-}
+
+    /**
+     * gestisce la caduta di un calciatore cambiando la sua immagine
+     * dopo 2 secondi lo rialza e sblocca il suo thread cosi puo riprendere a correre
+     *
+     * @param calciatore il calciatore che e caduto
+     */
+    public void calciatoreCaduto(Calciatore calciatore) {
+        String nome = calciatore.getNome();
+        SwingUtilities.invokeLater(() -> { // invokeLater serve ai thread per non  modificare la grafica direttamente
+            JLabel etichetta = immaginiCalciatori.get(nome);
+            if (etichetta != null) {
+                 // mostra l'immagine del calciatore a terra
+                etichetta.setIcon(caricaIcona(nome.toLowerCase() + "Terra", 120, 120));
+            }
+        });
+
+        // dopo 1,5 secondi rialza il calciatore
+        new Thread(() -> {
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException ignorata) {
+            }
+            SwingUtilities.invokeLater(() -> { // invokeLater serve ai thread per non  modificare la grafica direttamente
+                JLabel etichetta = immaginiCalciatori.get(nome);
+                if (etichetta != null) {
+                    etichetta.setIcon(caricaIcona(nome.toLowerCase() + "Corre", 120, 120));
+                }
+            });
+            calciatore.rialzati(); // sblocca il thread
+        }).start();
+    }
+
+    /**
+     * aggiunge un messaggio in cima alla lista degli avvenimenti
+     * insert(0) fa si che i messaggi nuovi appaiano sempre in alto
+     *
+     * @param messaggio il testo dell'avvenimento da mostrare
+     */
+    public void mostraMessaggio(String messaggio) {
+        SwingUtilities.invokeLater(() -> { // invokeLater serve ai thread per non  modificare la grafica direttamente
+            testoAvvenimenti.insert(0, "• " + messaggio + "\n");
+            jTextArea2.setText(testoAvvenimenti.toString());
+        });
+    }
+
+    /**
+     * viene chiamato quando un calciatore arriva al traguardo
+     * synchronized evita che due calciatori prendano lo stesso posto in classifica
+     * se il calciatore scelto dal giocatore arriva mostra un messaggio con il ris
+     *
+     * @param nome il nome del calciatore arrivato
+     */
+    public synchronized void calciatoreArrivato(String nome) {
+        int posto = postoCorrente++;
+        SwingUtilities.invokeLater(() -> { // invokeLater serve ai thread per non  modificare la grafica direttamente
+            JProgressBar barra = barreAvanzamento.get(nome);
+            if (barra != null) {
+                barra.setValue(passiArrivo);
+            }
+
+            String ris = posto == 1 ? "1° " : posto == 2 ? "2° " : posto == 3 ? "3° " : posto + "°";
+            classificaFinale.add(ris + " " + nome.toUpperCase());
+            StringBuilder testo = new StringBuilder();
+            for (String riga : classificaFinale) {
+                testo.append(riga).append("\n");
+            }
+            jTextArea1.setText(testo.toString());
+
+            if (nome.equalsIgnoreCase(calciatoreSelezionato)) {
+                String esito = posto == 1 ? "HAI VINTO " : "sei arrivato " + posto + "°";
+                JOptionPane.showMessageDialog(this, esito, "--GARA FINITA--", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+    }
+
+    /**
+     * carica un immagine dalla cartella immagini e la ridimensiona
+     * se il file non esiste restituisce un icona vuota senza mandare in crash il programma
+     *
+     * @param nomeFile il nome del file senza estensione
+     * @param larghezza larghezza desiderata in pixel
+     * @param altezza altezza desiderata in pixel
+     * @return l'icona ridimensionata oppure un icona vuota se non trovata
+     */
+    private ImageIcon caricaIcona(String nomeFile, int larghezza, int altezza) {
+        try {
+            java.net.URL indirizzo = getClass().getResource(
+                    "/Immagini/" + nomeFile + ".png");
+            if (indirizzo == null) {
+                return new ImageIcon();
+            }
+            Image immagine = new ImageIcon(indirizzo).getImage()
+                    .getScaledInstance(larghezza, altezza, Image.SCALE_SMOOTH);  // SCALE_SMOOTH rende l'immagine piu nitida quando viene ridimensionata
+            return new ImageIcon(immagine);
+        } catch (Exception errore) {
+            return new ImageIcon();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar ProgressBarHaaland;

@@ -10,8 +10,8 @@ package dangelogregoriogarathread;
  */
 
 /**
- * Classe che rappresenta un imprevisto positivo o negativo.
- * Ogni imprevisto ha una descrizione e un effetto sulla posizione del calciatore.
+ * classe che rappresenta un imprevisto positivo o negativo.
+ * ogni imprevisto ha una descrizione e un effetto sulla posizione del calciatore.
  */
 public class Imprevisto {
 
@@ -25,14 +25,26 @@ public class Imprevisto {
         this.negativo = negativo;
     }
 
+    /**
+     * 
+     * @return descrizione,messaggio del imprevisto
+     */
     public String getDescrizione() {
         return descrizione;
     }
 
+    /**
+     * 
+     * @return l'effetto sulla posizione
+     */
     public int getEffetto() {
         return effetto;
     }
 
+    /**
+     * 
+     * @return se imprevisto è neg
+     */
     public boolean isNegativo() {
         return negativo;
     }
