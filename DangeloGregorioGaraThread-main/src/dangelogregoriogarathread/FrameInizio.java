@@ -82,7 +82,7 @@ public class FrameInizio extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblTitolo, javax.swing.GroupLayout.DEFAULT_SIZE, 1205, Short.MAX_VALUE)
+            .addComponent(lblTitolo, javax.swing.GroupLayout.DEFAULT_SIZE, 1322, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -106,13 +106,13 @@ public class FrameInizio extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnAvvia, javax.swing.GroupLayout.DEFAULT_SIZE, 1205, Short.MAX_VALUE)
+            .addComponent(btnAvvia, javax.swing.GroupLayout.DEFAULT_SIZE, 1322, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnAvvia, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnAvvia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_END);

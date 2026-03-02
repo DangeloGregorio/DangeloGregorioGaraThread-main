@@ -5,10 +5,14 @@
 package dangelogregoriogarathread;
 
 /**
+ *
+ * @author dange
+ */
+
+/**
  * ogni calciatore è un thread separato che avanza in modo indipendente
  * gestisce da solo il movimento, gli imprevisti e la caduta
  *
- * @author dange
  */
 public class Calciatore extends Thread {
 
@@ -58,7 +62,7 @@ public class Calciatore extends Thread {
                 }
             }
 
-            // aspetta 200 millisecondi tra un passo e l altro per simulare la corsa
+            // aspetta 200 millisecondi tra un passo e l'altro 
             try {
                 Thread.sleep(200);
             } catch (InterruptedException eccezione) {
